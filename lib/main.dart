@@ -72,7 +72,7 @@ class MainNavigationScreen extends StatefulWidget {
 class _MainNavigationScreenState extends State<MainNavigationScreen> {
   int _selectedIndex = 0;
 
-  double startingBalancePastWeek = 1500.0; // Saldo heredado de semanas anteriores
+  double startingBalancePastWeek = 1500.0;
 
   final List<String> _categories = [
     'Alimentación',
