@@ -302,12 +302,12 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
         pageFormat: PdfPageFormat.a4,
         build: (pw.Context context) {
           return pw.Column(
-            cross: pw.CrossAxisAlignment.start,
+            crossAxisAlignment: pw.CrossAxisAlignment.start,
             children: [
               pw.Header(
                 level: 0,
                 child: pw.Row(
-                  main: pw.MainAxisAlignment.between,
+                  mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                   children: [
                     pw.Text('Gastos Ruth - Reporte de Corte $type',
                         style: pw.TextStyle(fontSize: 20, fontWeight: pw.FontWeight.bold)),
@@ -328,7 +328,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                 child: pw.Column(
                   children: [
                     pw.Row(
-                      main: pw.MainAxisAlignment.between,
+                      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                       children: [
                         pw.Text('Saldo Inicial:', style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
                         pw.Text(currencyFmt.format(initialBalance)),
@@ -336,7 +336,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                     ),
                     pw.SizedBox(height: 4),
                     pw.Row(
-                      main: pw.MainAxisAlignment.between,
+                      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                       children: [
                         pw.Text('(+) Ingresos del periodo:', style: const pw.TextStyle(color: PdfColors.green)),
                         pw.Text(currencyFmt.format(periodIncomes), style: const pw.TextStyle(color: PdfColors.green)),
@@ -344,7 +344,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                     ),
                     pw.SizedBox(height: 4),
                     pw.Row(
-                      main: pw.MainAxisAlignment.between,
+                      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                       children: [
                         pw.Text('(-) Gastos del periodo:', style: const pw.TextStyle(color: PdfColors.red)),
                         pw.Text(currencyFmt.format(periodExpenses), style: const pw.TextStyle(color: PdfColors.red)),
@@ -352,7 +352,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                     ),
                     pw.Divider(),
                     pw.Row(
-                      main: pw.MainAxisAlignment.between,
+                      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                       children: [
                         pw.Text('Saldo Final:', style: pw.TextStyle(fontSize: 14, fontWeight: pw.FontWeight.bold)),
                         pw.Text(currencyFmt.format(finalBalance), style: pw.TextStyle(fontSize: 14, fontWeight: pw.FontWeight.bold)),
@@ -812,7 +812,7 @@ class AnalyticsScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.between,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(cat, style: const TextStyle(fontWeight: FontWeight.bold)),
                               Text('${fmt.format(amount)} (${(pct * 100).toStringAsFixed(1)}%)'),
@@ -917,7 +917,7 @@ class WeeklySummaryScreen extends StatelessWidget {
               child: Column(
                 children: [
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.between,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Text('Saldo con que saliste la semana pasada:'),
                       Text(fmt.format(startingBalancePastWeek), style: const TextStyle(fontWeight: FontWeight.bold)),
@@ -925,14 +925,14 @@ class WeeklySummaryScreen extends StatelessWidget {
                   ),
                   const Divider(),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.between,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Text('(+) Ingresos esta semana:'),
                       Text(fmt.format(weekIncomes), style: const TextStyle(color: Colors.green, fontWeight: FontWeight.bold)),
                     ],
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.between,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Text('(-) Gastos esta semana:'),
                       Text(fmt.format(weekExpenses), style: const TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
@@ -940,7 +940,7 @@ class WeeklySummaryScreen extends StatelessWidget {
                   ),
                   const Divider(),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.between,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Text('Saldo para la siguiente semana:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
                       Text(fmt.format(endingBalance), style: const TextStyle(color: Color(0xFF009688), fontWeight: FontWeight.bold, fontSize: 16)),
