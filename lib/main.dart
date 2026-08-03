@@ -72,8 +72,6 @@ class MainNavigationScreen extends StatefulWidget {
 class _MainNavigationScreenState extends State<MainNavigationScreen> {
   int _selectedIndex = 0;
 
-  double startingBalancePastWeek = 1500.0;
-
   final List<String> _categories = [
     'Alimentación',
     'Comida Mascotas',
@@ -400,10 +398,6 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
           isExpense: true,
         ),
       ),
-      WeeklySummaryScreen(
-        transactions: _transactions,
-        startingBalancePastWeek: startingBalancePastWeek,
-      ),
     ];
 
     return Scaffold(
@@ -436,7 +430,6 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
           BottomNavigationBarItem(icon: Icon(Icons.savings), label: 'Apartados'),
           BottomNavigationBarItem(icon: Icon(Icons.bar_chart), label: 'Gráficos'),
           BottomNavigationBarItem(icon: Icon(Icons.calendar_month), label: 'Futuro'),
-          BottomNavigationBarItem(icon: Icon(Icons.date_range), label: 'Semanas'),
         ],
       ),
       floatingActionButton: _selectedIndex == 0
@@ -992,79 +985,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
                   ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class WeeklySummaryScreen extends StatelessWidget {
-  final List<Transaction> transactions;
-  final double startingBalancePastWeek;
-
-  const WeeklySummaryScreen({super.key, required this.transactions, required this.startingBalancePastWeek});
-
-  @override
-  Widget build(BuildContext context) {
-    final fmt = NumberFormat.currency(symbol: '\$', decimalDigits: 2);
-
-    final now = DateTime.now();
-    final currentWeekTransactions = transactions.where((t) {
-      final diff = now.difference(t.date).inDays;
-      return diff <= 7 && diff >= 0;
-    }).toList();
-
-    double weekIncomes = currentWeekTransactions.where((t) => !t.isExpense).fold(0.0, (sum, t) => sum + t.amount);
-    double weekExpenses = currentWeekTransactions.where((t) => t.isExpense).fold(0.0, (sum, t) => sum + t.amount);
-    double endingBalance = startingBalancePastWeek + weekIncomes - weekExpenses;
-
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text('Cierre Semanal y Traspaso de Saldo', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 16),
-          Card(
-            elevation: 3,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text('Saldo con que saliste la semana pasada:'),
-                      Text(fmt.format(startingBalancePastWeek), style: const TextStyle(fontWeight: FontWeight.bold)),
-                    ],
-                  ),
-                  const Divider(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text('(+) Ingresos esta semana:'),
-                      Text(fmt.format(weekIncomes), style: const TextStyle(color: Colors.green, fontWeight: FontWeight.bold)),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text('(-) Gastos esta semana:'),
-                      Text(fmt.format(weekExpenses), style: const TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
-                    ],
-                  ),
-                  const Divider(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text('Saldo para la siguiente semana:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                      Text(fmt.format(endingBalance), style: const TextStyle(color: Color(0xFF009688), fontWeight: FontWeight.bold, fontSize: 16)),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          )
-        ],
       ),
     );
   }
