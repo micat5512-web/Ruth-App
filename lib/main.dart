@@ -389,7 +389,10 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
       ),
       CalendarScreen(
         transactions: _transactions,
-      ),
+        onEditTransaction: (tx) =>
+           _openTransactionFormModal(transactionToEdit: tx),
+  onDeleteTransaction: _deleteTransaction,
+),
       WeeklySummaryScreen(
         transactions: _transactions,
         startingBalancePastWeek: startingBalancePastWeek,
