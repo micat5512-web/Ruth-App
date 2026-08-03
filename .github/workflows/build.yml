@@ -51,6 +51,9 @@ jobs:
       - name: Obtener dependencias
         run: flutter pub get
 
+      - name: Generar íconos de la app
+        run: flutter pub run flutter_launcher_icons
+        
       - name: Compilar APK
         run: flutter build apk --release --no-tree-shake-icons
 
