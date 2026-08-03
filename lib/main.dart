@@ -84,57 +84,9 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
     'Otros',
   ];
 
-  final List<Transaction> _transactions = [
-    Transaction(
-      id: '1',
-      description: 'Sueldo Semana Pasada',
-      amount: 2500.0,
-      isExpense: false,
-      category: 'Otros',
-      date: DateTime.now().subtract(const Duration(days: 8)),
-    ),
-    Transaction(
-      id: '2',
-      description: 'Compra Despensa',
-      amount: 450.0,
-      isExpense: true,
-      category: 'Alimentación',
-      date: DateTime.now().subtract(const Duration(days: 2)),
-    ),
-    Transaction(
-      id: '3',
-      description: 'Croquetas Croqueta',
-      amount: 280.0,
-      isExpense: true,
-      category: 'Comida Mascotas',
-      date: DateTime.now().subtract(const Duration(days: 1)),
-    ),
-    Transaction(
-      id: '4',
-      description: 'Farmacia / Medicamento',
-      amount: 150.0,
-      isExpense: true,
-      category: 'Salud',
-      date: DateTime.now(),
-    ),
-    Transaction(
-      id: '5',
-      description: 'Cobro Trabajo Extra (Proyectado)',
-      amount: 800.0,
-      isExpense: false,
-      category: 'Otros',
-      date: DateTime.now().add(const Duration(days: 3)),
-    ),
-  ];
+  final List<Transaction> _transactions = [];
 
-  final List<Apartado> _apartados = [
-    Apartado(
-      id: 'a1',
-      title: 'Fondo de Emergencia Salud',
-      amount: 500.0,
-      note: 'Reservado para gastos médicos inesperados',
-    ),
-  ];
+  final List<Apartado> _apartados = [];
 
   double get totalIncome => _transactions
       .where((t) => !t.isExpense && t.date.isBefore(DateTime.now().add(const Duration(seconds: 1))))
