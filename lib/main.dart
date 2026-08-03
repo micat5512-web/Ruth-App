@@ -387,12 +387,12 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
         transactions: _transactions,
         categories: _categories,
       ),
-      CalendarScreen(
-        transactions: _transactions,
-        onEditTransaction: (tx) =>
+     CalendarScreen(
+       transactions: _transactions,
+       onEditTransaction: (tx) =>
            _openTransactionFormModal(transactionToEdit: tx),
-  onDeleteTransaction: _deleteTransaction,
-),
+      onDeleteTransaction: _deleteTransaction,
+     ),
       WeeklySummaryScreen(
         transactions: _transactions,
         startingBalancePastWeek: startingBalancePastWeek,
@@ -793,49 +793,161 @@ class AnalyticsScreen extends StatelessWidget {
 
 class CalendarScreen extends StatelessWidget {
   final List<Transaction> transactions;
+  final Function(Transaction) onEditTransaction;
+  final Function(String) onDeleteTransaction;
 
-  const CalendarScreen({super.key, required this.transactions});
+  const CalendarScreen({
+    super.key,
+    required this.transactions,
+    required this.onEditTransaction,
+    required this.onDeleteTransaction,
+  });
 
-  @override
-  Widget build(BuildContext context) {
-    final fmt = NumberFormat.currency(symbol: '\$', decimalDigits: 2);
-    final sortedTx = List<Transaction>.from(transactions)..sort((a, b) => a.date.compareTo(b.date));
+@override
+Widget build(BuildContext context) {
+  final fmt = NumberFormat.currency(symbol: '\$', decimalDigits: 2);
 
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text('Proyección de Ingresos y Gastos Futuros', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 12),
-          Expanded(
-            child: ListView.builder(
-              itemCount: sortedTx.length,
-              itemBuilder: (ctx, i) {
-                final tx = sortedTx[i];
-                final isFuture = tx.date.isAfter(DateTime.now());
-                return Card(
-                  color: isFuture ? Colors.blue.shade50 : Colors.white,
-                  child: ListTile(
-                    leading: Icon(
-                      isFuture ? Icons.event : Icons.history,
-                      color: isFuture ? Colors.blue : Colors.grey,
-                    ),
-                    title: Text(tx.description),
-                    subtitle: Text('${DateFormat('dd/MM/yyyy').format(tx.date)} • ${tx.isExpense ? 'Gasto' : 'Ingreso'}'),
-                    trailing: Text(
-                      '${tx.isExpense ? '-' : '+'}${fmt.format(tx.amount)}',
-                      style: TextStyle(fontWeight: FontWeight.bold, color: tx.isExpense ? Colors.red : Colors.green),
-                    ),
+  final futureTransactions = transactions
+      .where((t) => t.date.isAfter(DateTime.now()))
+      .toList()
+    ..sort((a, b) => a.date.compareTo(b.date));
+
+  return Padding(
+    padding: const EdgeInsets.all(16),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+
+        const Text(
+          'Movimientos Programados',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+
+        const SizedBox(height: 15),
+
+        Expanded(
+          child: futureTransactions.isEmpty
+              ? const Center(
+                  child: Text(
+                    'No hay movimientos programados',
+                    style: TextStyle(fontSize: 16),
                   ),
-                );
-              },
-            ),
-          )
-        ],
-      ),
-    );
-  }
+                )
+              : ListView.builder(
+                  itemCount: futureTransactions.length,
+                  itemBuilder: (context, index) {
+
+                    final tx = futureTransactions[index];
+
+                    return Card(
+                      elevation: 3,
+                      margin: const EdgeInsets.symmetric(vertical: 6),
+                      child: ListTile(
+
+                        leading: CircleAvatar(
+                          backgroundColor:
+                              tx.isExpense ? Colors.red : Colors.green,
+                          child: Icon(
+                            tx.isExpense
+                                ? Icons.remove
+                                : Icons.add,
+                            color: Colors.white,
+                          ),
+                        ),
+
+                        title: Text(tx.description),
+
+                        subtitle: Text(
+                          "${DateFormat('dd/MM/yyyy').format(tx.date)}\n${tx.category}",
+                        ),
+
+                        isThreeLine: true,
+
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+
+                            Text(
+                              fmt.format(tx.amount),
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: tx.isExpense
+                                    ? Colors.red
+                                    : Colors.green,
+                              ),
+                            ),
+
+                            IconButton(
+                              icon: const Icon(
+                                Icons.edit,
+                                color: Colors.blue,
+                              ),
+                              onPressed: () {
+                                onEditTransaction(tx);
+                              },
+                            ),
+
+                            IconButton(
+                              icon: const Icon(
+                                Icons.delete,
+                                color: Colors.red,
+                              ),
+                              onPressed: () {
+
+                                showDialog(
+                                  context: context,
+                                  builder: (_) => AlertDialog(
+
+                                    title: const Text(
+                                      "Eliminar movimiento",
+                                    ),
+
+                                    content: const Text(
+                                      "¿Deseas eliminar este movimiento programado?",
+                                    ),
+
+                                    actions: [
+
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: const Text("Cancelar"),
+                                      ),
+
+                                      ElevatedButton(
+                                        onPressed: () {
+
+                                          onDeleteTransaction(tx.id);
+
+                                          Navigator.pop(context);
+
+                                        },
+                                        child: const Text("Eliminar"),
+                                      )
+
+                                    ],
+                                  ),
+                                );
+
+                              },
+                            ),
+
+                          ],
+                        ),
+                      ),
+                    );
+
+                  },
+                ),
+        ),
+
+      ],
+    ),
+  );
 }
 
 class WeeklySummaryScreen extends StatelessWidget {
