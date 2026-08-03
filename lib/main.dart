@@ -949,7 +949,7 @@ Widget build(BuildContext context) {
     ),
   );
 }
-
+}
 class WeeklySummaryScreen extends StatelessWidget {
   final List<Transaction> transactions;
   final double startingBalancePastWeek;
